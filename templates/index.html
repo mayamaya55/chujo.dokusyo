@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>中条小読書会 読み聞かせ記録検索</title>
-    <style>
+        <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 2em; background-color: #f8f9fa; color: #212529; }
         h1 { color: #343a40; }
         .container { max-width: 800px; margin: auto; background: white; padding: 2em; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
@@ -16,7 +16,13 @@
         table { border-collapse: collapse; width: 100%; margin-top: 1em; }
         th, td { border: 1px solid #dee2e6; padding: 12px; text-align: left; }
         th { background-color: #e9ecef; }
-        tbody tr:nth-child(odd) { background-color: #f8f9fa; }
+        /* 年度別の色分け用スタイル */
+        .year-color-0 { background-color: #e0f7fa; }
+        .year-color-1 { background-color: #fff9c4; }
+        .year-color-2 { background-color: #f1f8e9; }
+        .year-color-3 { background-color: #fce4ec; }
+        .year-color-4 { background-color: #ede7f6; }
+        .default-color { background-color: #fafafa; }
     </style>
 </head>
 <body>
@@ -53,8 +59,24 @@
     </div>
 
     <script>
+        const yearColorMap = {};
+        let nextColorIndex = 0;
+        const colors = ['year-color-0', 'year-color-1', 'year-color-2', 'year-color-3', 'year-color-4'];
+
+        function getYearColorClass(year) {
+            if (year in yearColorMap) {
+                return yearColorMap[year];
+            }
+            if (nextColorIndex < colors.length) {
+                const colorClass = colors[nextColorIndex];
+                yearColorMap[year] = colorClass;
+                nextColorIndex++;
+                return colorClass;
+            }
+            return 'default-color';
+        }
+
         async function searchBooks() {
-            // Debugging: Force redeploy to ensure latest frontend code is active
             const grade = document.getElementById('grade').value;
             if (!grade) {
                 alert('学年を選択してください。');
@@ -67,6 +89,10 @@
             const tbody = document.querySelector('#results-table tbody');
             tbody.innerHTML = ''; // 前回の結果をクリア
 
+            // Reset color mapping for each new search
+            Object.keys(yearColorMap).forEach(key => delete yearColorMap[key]);
+            nextColorIndex = 0;
+
             if (results.length === 0) {
                 const row = tbody.insertRow();
                 const cell = row.insertCell();
@@ -78,7 +104,11 @@
 
             results.forEach(book => {
                 const row = tbody.insertRow();
-                row.insertCell().textContent = book.school_year;
+                const year = book.school_year;
+                const colorClass = getYearColorClass(year);
+                row.classList.add(colorClass);
+
+                row.insertCell().textContent = year;
                 row.insertCell().textContent = book.class;
                 row.insertCell().textContent = book.title;
                 row.insertCell().textContent = book.author;
