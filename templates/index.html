@@ -50,7 +50,6 @@
                 <!-- 結果はここに表示されます -->
             </tbody>
         </table>
-        <div id="raw-results" style="white-space: pre-wrap; margin-top: 20px; background-color: #f0f0f0; padding: 10px; border-radius: 5px;"></div>
     </div>
 
     <script>
@@ -65,14 +64,8 @@
             const response = await fetch(`/search?grade=${grade}`);
             const results = await response.json();
 
-            // --- Debugging: Display raw JSON instead of table ---
-            const rawResultsDiv = document.getElementById('raw-results');
-            rawResultsDiv.textContent = JSON.stringify(results, null, 2);
-            // --- End Debugging ---
-
-            // Original table display logic (commented out for debugging)
             const tbody = document.querySelector('#results-table tbody');
-            tbody.innerHTML = ''; // Clear previous results
+            tbody.innerHTML = ''; // 前回の結果をクリア
 
             if (results.length === 0) {
                 const row = tbody.insertRow();
