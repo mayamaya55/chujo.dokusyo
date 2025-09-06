@@ -91,6 +91,17 @@ def search():
         return jsonify([])
 
     results = [record for record in records if record['grade'] == query_grade]
+    
+    # 読み聞かせ年度でソート（新しい順）
+    # '2025年度' -> 2025 のように数値に変換してソート
+    def get_year_from_school_year(school_year_str):
+        try:
+            return int(school_year_str.replace('年度', ''))
+        except ValueError:
+            return 0 # パースできない場合は0として扱うか、適切なデフォルト値
+
+    results.sort(key=lambda x: get_year_from_school_year(x.get('school_year', '')), reverse=True)
+
     return jsonify(results)
 
 if __name__ == '__main__':
