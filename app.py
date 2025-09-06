@@ -62,9 +62,12 @@ def load_data():
                     class_val += '組'
 
                 # 時間に「分」がなければ追加
-                time_val = str(row.get(time_col, '')) if time_col else ''
-                if '分' not in time_val and time_val:
-                    time_val += '分'
+                raw_time_val = row.get(time_col, None) # Noneをデフォルト値として取得
+                time_val = ''
+                if pd.notna(raw_time_val): # NaNでないことを確認
+                    time_val = str(raw_time_val)
+                    if '分' not in time_val and time_val:
+                        time_val += '分'
                 # --- ここまで ---
 
                 records.append({
