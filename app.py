@@ -7,8 +7,9 @@ app = Flask(__name__)
 
 # データの前処理
 def load_data():
-    # CSVファイルを読み込む
-    df = pd.read_csv('data.csv')
+    # Googleスプレッドシートから直接CSVデータを読み込む
+    sheet_url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSQmkSAmQg0URmn5u2cTIG5Vd6L0m64KtuPuWN99ITIzGFs9ELeiPUKOFRdwD0knvN5HWGNQLRBfMug/pub?gid=293316096&single=true&output=csv"
+    df = pd.read_csv(sheet_url)
 
     # データを整形する
     records = []
