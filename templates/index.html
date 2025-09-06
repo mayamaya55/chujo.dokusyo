@@ -39,7 +39,7 @@
         <table id="results-table">
             <thead>
                 <tr>
-                    <th>読み聞かせ日</th>
+                    <th>読み聞かせ年度</th>
                     <th>クラス</th>
                     <th>本のタイトル</th>
                     <th>作家など</th>
@@ -77,7 +77,7 @@
 
             results.forEach(book => {
                 const row = tbody.insertRow();
-                row.insertCell().textContent = book.date;
+                row.insertCell().textContent = book.school_year;
                 row.insertCell().textContent = book.class;
                 row.insertCell().textContent = book.title;
                 row.insertCell().textContent = book.author;

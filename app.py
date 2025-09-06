@@ -41,8 +41,20 @@ def load_data():
                 time_col = time_col_v2
 
             if title_col in df.columns and pd.notna(row[title_col]):
+                # 年度計算ロジック
+                school_year_str = ''
+                try:
+                    # 日付をパース
+                    read_date = pd.to_datetime(row['読み聞かせ日'])
+                    # 4月以降ならその年、1-3月なら前年を年度とする
+                    school_year = read_date.year if read_date.month >= 4 else read_date.year - 1
+                    school_year_str = f'{school_year}年度'
+                except (ValueError, TypeError):
+                    # パース失敗時は元の日付をそのまま使う
+                    school_year_str = row['読み聞かせ日']
+
                 records.append({
-                    'date': row['読み聞かせ日'],
+                    'school_year': school_year_str,
                     'grade': grade,
                     'class': class_name,
                     'title': row[title_col],
