@@ -70,12 +70,17 @@ def load_data():
                         time_val += '分'
                 # --- ここまで ---
 
+                # 作家情報がない場合やNaNの場合を考慮
+                author_val = row.get(author_col, None)
+                if pd.isna(author_val):
+                    author_val = ''
+
                 records.append({
                     'school_year': school_year_str,
                     'grade': grade,
                     'class': class_val,
                     'title': row[title_col],
-                    'author': row.get(author_col, ''), # 作家情報がない場合も考慮
+                    'author': author_val, # NaNを考慮した値
                     'time': time_val
                 })
     return records
