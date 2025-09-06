@@ -53,13 +53,25 @@ def load_data():
                     # パース失敗時は元の日付をそのまま使う
                     school_year_str = row['読み聞かせ日']
 
+                # --- 表示整形ロジック ---
+                # クラス名に「組」がなければ追加
+                class_val = str(class_name) if pd.notna(class_name) else ''
+                if '組' not in class_val and class_val:
+                    class_val += '組'
+
+                # 時間に「分」がなければ追加
+                time_val = str(row.get(time_col, '')) if time_col else ''
+                if '分' not in time_val and time_val:
+                    time_val += '分'
+                # --- ここまで ---
+
                 records.append({
                     'school_year': school_year_str,
                     'grade': grade,
-                    'class': class_name,
+                    'class': class_val,
                     'title': row[title_col],
                     'author': row.get(author_col, ''), # 作家情報がない場合も考慮
-                    'time': row.get(time_col, '') if time_col else '' # 時間情報がない場合も考慮
+                    'time': time_val
                 })
     return records
 
