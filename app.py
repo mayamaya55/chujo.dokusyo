@@ -31,14 +31,23 @@ def load_data():
         for i in ['➀', '②', '③']:
             title_col = f'{i}読み聞かせした本　タイトル'
             author_col = f'{i}作家・絵・編集者など'
-            
+            # 目安時間の列名揺れに対応
+            time_col_v1 = f'{i}目安（1冊あたりの時間）'
+            time_col_v2 = f'{i}目安　（1冊あたりの時間）'
+            time_col = None
+            if time_col_v1 in df.columns:
+                time_col = time_col_v1
+            elif time_col_v2 in df.columns:
+                time_col = time_col_v2
+
             if title_col in df.columns and pd.notna(row[title_col]):
                 records.append({
                     'date': row['読み聞かせ日'],
                     'grade': grade,
                     'class': class_name,
                     'title': row[title_col],
-                    'author': row.get(author_col, '') # 作家情報がない場合も考慮
+                    'author': row.get(author_col, ''), # 作家情報がない場合も考慮
+                    'time': row.get(time_col, '') if time_col else '' # 時間情報がない場合も考慮
                 })
     return records
 

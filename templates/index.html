@@ -43,6 +43,7 @@
                     <th>クラス</th>
                     <th>本のタイトル</th>
                     <th>作家など</th>
+                    <th>目安時間</th>
                 </tr>
             </thead>
             <tbody>
@@ -68,7 +69,7 @@
             if (results.length === 0) {
                 const row = tbody.insertRow();
                 const cell = row.insertCell();
-                cell.colSpan = 4;
+                cell.colSpan = 5;
                 cell.textContent = '該当する記録はありませんでした。';
                 cell.style.textAlign = 'center';
                 return;
@@ -80,6 +81,7 @@
                 row.insertCell().textContent = book.class;
                 row.insertCell().textContent = book.title;
                 row.insertCell().textContent = book.author;
+                row.insertCell().textContent = book.time;
             });
         }
     </script>
