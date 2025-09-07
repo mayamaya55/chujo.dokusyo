@@ -111,6 +111,25 @@ def search():
 
     return jsonify(results)
 
+# --- 自動リロード用エンドポイント ---
+# Renderの環境変数に `RELOAD_SECRET` を設定することを推奨
+RELOAD_SECRET = os.environ.get('RELOAD_SECRET', 'changeme_to_a_long_random_string')
+
+@app.route('/reload-data')
+def reload_data():
+    secret = request.args.get('secret')
+    if secret != RELOAD_SECRET:
+        return "Unauthorized", 401
+
+    global records
+    try:
+        records = load_data()
+        print("Data reloaded successfully!")
+        return "Data reloaded successfully!", 200
+    except Exception as e:
+        print(f"Error reloading data: {e}")
+        return f"Error reloading data: {e}", 500
+
 if __name__ == '__main__':
     # ポート5001で実行し、外部からのアクセスを許可
     app.run(host='0.0.0.0', port=5001, debug=True)
